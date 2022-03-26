@@ -5,6 +5,7 @@ void setup() {
   delay(1000);
   
   blynk_setup();
+  fastled_setup();
   effect_control_setup();
 }
 void loop() {
