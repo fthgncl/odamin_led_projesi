@@ -6,12 +6,12 @@ void setup() {
   
   blynk_setup();
   fastled_setup();
+  startanimation();
   effect_control_setup();
 }
 void loop() {
   
   blynk_loop();
   effect_control_loop();
-
-  delay(100);
+  FastLED.show();
 }
