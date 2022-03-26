@@ -3,32 +3,34 @@
 
 const bool singleUse = true;
 const bool continuousUse = !singleUse;
+int effectCount = 0;
 
 class Effect
 {
   public:
     bool enable = true;
     bool useType; // true : single use , false continuous use
-    int EffectID;
+    int id = -1;
     bool clockwork;
     float startTime = -1.0;
     float endTime = -1.0;
 
 
-    void create(int EffectID, byte useType, bool clockwork) {
-      this->EffectID = EffectID;
+    void create(byte useType) {   
+      this->id = effectCount;
       this->useType = useType;
-      this->clockwork = clockwork;
-
+      this->clockwork = false;
+      effectCount++;
     }
 
     void addWorkTime(byte startHour, byte startMinute, byte endHour, byte endMinute) {
+      clockwork = true;
       startTime = startHour + (startMinute / 60.0);
       endTime = endHour + (endMinute / 60.0);
     }
 
     bool isTime() {
-
+      
       float nowTime = timeClient.getHours() + (timeClient.getMinutes() / 60.0);
 
       if ( startTime > endTime ) {
@@ -43,7 +45,6 @@ class Effect
 
       return false;
     }
-
 };
 
 #endif
