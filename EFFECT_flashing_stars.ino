@@ -26,7 +26,7 @@ void flashingStars() {
   }
   else
 
-  isikSiddetiniAyarla();
+    isikSiddetiniAyarla();
 
   int katman = bostaKatmanBul();
   if ( katman == -1 )
