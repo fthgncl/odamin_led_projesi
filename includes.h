@@ -9,6 +9,13 @@
 #include <BlynkSimpleEsp8266.h>
 /***********************/
 
+/* WebServer includes */
+#include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
+#define webServerPort 3000
+ESP8266WebServer server(webServerPort);
+/***********************/
+
 /* NTP Client includes */
 #include <NTPClient.h>
 #include <WiFiUdp.h>
