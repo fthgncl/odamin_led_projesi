@@ -6,16 +6,16 @@ bool firtTimeEffect[EFFECT_COUNTS];
 void effect_control_setup() {
 
   allEffects[0].create(continuousUse);  /// DemoReel
-  allEffects[0].addWorkTime(21, 20, 21, 54);
+  allEffects[0].addWorkTime(18, 00, 21, 00);
 
   allEffects[1].create(singleUse);  /// Circle night lamb
-  allEffects[1].addWorkTime(15, 00, 21, 44);
+  allEffects[1].addWorkTime(04, 20, 06, 20);
 
   allEffects[2].create(continuousUse);  /// Flashing Stars
-  allEffects[2].addWorkTime(21, 34, 21, 43);
+  allEffects[2].addWorkTime(22, 30, 01, 30);
 
   allEffects[3].create(continuousUse);  /// Dynamic Circle
-  allEffects[3].addWorkTime(21, 34, 02, 54);
+  allEffects[3].addWorkTime(21, 00, 23, 30);
 
 }
 void effect_control_loop() {
