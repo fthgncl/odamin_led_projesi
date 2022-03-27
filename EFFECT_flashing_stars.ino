@@ -5,7 +5,6 @@ byte yildizPariltisiGiris = 0;
 
 
 void yildizPariltisiOnAyar() {
-  Serial.println("Yildiz Pariltisi Giriş Yapıldı");
   int led;
   for ( int i = 0 ; i < ARRAY_SIZE(parlayacakYildizlar) ; i ++ ) {
     flashingStars();
@@ -25,7 +24,6 @@ void flashingStars() {
     yildizPariltisiOnAyar();
   }
   else
-
     isikSiddetiniAyarla();
 
   int katman = bostaKatmanBul();
@@ -37,15 +35,17 @@ void flashingStars() {
 
   int led = 0;
   while ( !led ) {
-    led = bostaLedBul(0, NUM_LEDS);
+    led = bostaLedBul(0, 232);
     parlayacakYildizlar[katman][0] = led;
   }
 }
 
 void isikSiddetiniAyarla() {
 
-  if ( yildizPariltisiSayaci >= ARRAY_SIZE(parlayacakYildizlar ) - 1 )
+  if ( yildizPariltisiSayaci >= ARRAY_SIZE(parlayacakYildizlar ) - 1 ) {
     yildizPariltisiSayaci = 0;
+    yildizSenktronizesiKontrolu();
+  }
   else yildizPariltisiSayaci++;
 
   int katman = yildizPariltisiSayaci;
@@ -60,6 +60,15 @@ void isikSiddetiniAyarla() {
   else if ( leds[led].r <= 0 && leds[led].g <= 0 && leds[led].b <= 0 ) {
     parlayacakYildizlar[katman][0] = 0;
   }
+}
+void yildizSenktronizesiKontrolu() {
+  int led1 = parlayacakYildizlar[2][0];
+  int led2 = parlayacakYildizlar[1][0];
+
+  if ( leds[led1].r == leds[led2].r && leds[led1].g == leds[led2].g && leds[led1].b == leds[led2].b ) {
+    yildizPariltisiOnAyar();
+  }
+
 }
 int bostaLedBul(int baslangic, int bitis) {
   int ledNo = random(baslangic, bitis);
