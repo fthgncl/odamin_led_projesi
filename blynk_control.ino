@@ -12,12 +12,51 @@ void blynk_loop() {
   Blynk.run();
 }
 
+void sendSystemReport() {
+
+  timeClient.update();
+
+  String report;
+  report += "Son Güncellenme Tarihi : ";
+  report += getTimeStampString();
+  report += " | Local IP : ";
+  report += WiFi.localIP().toString();
+  report += " : ";
+  report += String(webServerPort);
+
+  Blynk.virtualWrite(V9, report);
+
+}
+String getTimeStampString() {
+   time_t rawtime = timeClient.getEpochTime();
+   struct tm * ti;
+   ti = localtime (&rawtime);
+
+   uint16_t year = ti->tm_year + 1900;
+   String yearStr = String(year);
+
+   uint8_t month = ti->tm_mon + 1;
+   String monthStr = month < 10 ? "0" + String(month) : String(month);
+
+   uint8_t day = ti->tm_mday;
+   String dayStr = day < 10 ? "0" + String(day) : String(day);
+
+   uint8_t hours = ti->tm_hour;
+   String hoursStr = hours < 10 ? "0" + String(hours) : String(hours);
+
+   uint8_t minutes = ti->tm_min;
+   String minuteStr = minutes < 10 ? "0" + String(minutes) : String(minutes);
+
+   return yearStr + "/" + monthStr + "/" + dayStr + " " +
+          hoursStr + ":" + minuteStr;
+}
 void blynkUpdateDashBoard() {
   Blynk.virtualWrite(V0, runByTime);
   Blynk.virtualWrite(V1, getEffectManualWorkStatus(0));
   Blynk.virtualWrite(V2, getEffectManualWorkStatus(1));
   Blynk.virtualWrite(V3, getEffectManualWorkStatus(2));
   Blynk.virtualWrite(V8, getEffectManualWorkStatus(3));
+  sendSystemReport();
 }
 
 BLYNK_CONNECTED() {
@@ -62,7 +101,6 @@ BLYNK_WRITE(V7)  {
   setManualRGB();
 }
 
-
 void setManualRGB() {
   if ( runByTime )
     return;
@@ -70,7 +108,7 @@ void setManualRGB() {
   for ( int i = 0; i < NUM_LEDS; i++) {
     leds[i].setRGB(manualBlynkRGB[0], manualBlynkRGB[1], manualBlynkRGB[2]);
   }
-  
+
   if (manualBlynkRGB[0] + manualBlynkRGB[1] + manualBlynkRGB[2] == 0)
     effectStopProtocol();
 }
