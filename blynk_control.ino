@@ -52,10 +52,10 @@ String getTimeStampString() {
 }
 void blynkUpdateDashBoard() {
   Blynk.virtualWrite(V0, runByTime);
-  Blynk.virtualWrite(V1, getEffectManualWorkStatus(0));
-  Blynk.virtualWrite(V2, getEffectManualWorkStatus(1));
-  Blynk.virtualWrite(V3, getEffectManualWorkStatus(2));
-  Blynk.virtualWrite(V8, getEffectManualWorkStatus(3));
+  Blynk.virtualWrite(V1, runByTime?getEffectIsTimeStatus(0):getEffectManualWorkStatus(0));
+  Blynk.virtualWrite(V2, runByTime?getEffectIsTimeStatus(1):getEffectManualWorkStatus(1));
+  Blynk.virtualWrite(V3, runByTime?getEffectIsTimeStatus(2):getEffectManualWorkStatus(2));
+  Blynk.virtualWrite(V4, runByTime?getEffectIsTimeStatus(3):getEffectManualWorkStatus(3));
   sendSystemReport();
 }
 
@@ -83,10 +83,6 @@ BLYNK_WRITE(V3)  {  // Efekt 3
 
 BLYNK_WRITE(V8)  {  // Efekt 4
   changeEffectManualWorkStatus(3, param.asInt());
-}
-
-BLYNK_WRITE(V4)  {
-  Serial.println("zxxxxxxxxxxxxxxxxxxxxxx");
 }
 BLYNK_WRITE(V5)  {
   manualBlynkRGB[0] = param.asInt();

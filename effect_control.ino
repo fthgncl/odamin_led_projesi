@@ -80,3 +80,6 @@ void changeEffectManualWorkStatus(byte num, bool manualWorkStatus) {
 bool getEffectManualWorkStatus(byte num) {
   return allEffects[num].manualWork;
 }
+bool getEffectIsTimeStatus(byte num) {
+  return allEffects[num].isTime();
+}
