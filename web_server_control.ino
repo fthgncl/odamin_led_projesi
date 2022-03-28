@@ -1,10 +1,10 @@
 void web_server_setup() {
 
-  server.on("/",HTTP_POST, handle_OnConnect);
+  server.on("/", HTTP_POST, handle_OnConnect);
   server.onNotFound(handle_NotFound);
 
   server.begin();
-  
+
 }
 void web_server_loop() {
   server.handleClient();
@@ -15,20 +15,22 @@ void handle_NotFound() {
   server.send(404, "text/plain", "Sayfa Bulunamadı");
 }
 
-void handle_OnConnect() { //Handler for the body path
+void handle_OnConnect() {
 
-  if (server.hasArg("plain") == false) { //Check if body received
-
-    server.send(200, "text/plain", "Body notxxx received");
+  if (server.hasArg("plain") == false) {
+    server.send(200, "text/plain", "you did not send any data");
     return;
-
   }
 
-  String message = "Body received:\n";
-  message += server.arg("plain");
-  message += "\n";
+  server.send(200, "text/plain", "process completed");
+  stringToData(server.arg("plain"));
+}
 
-  Serial.println(server.arg("plain"));
+void stringToData(String strJson) {
 
-  server.send(200, "text/plain", message);
+  DynamicJsonDocument doc(1024);
+  deserializeJson(doc, strJson);
+  JsonObject obj = doc.as<JsonObject>();
+
+  getEvent(int(obj["gameid"]), int(obj["effect"]));
 }

@@ -1,4 +1,5 @@
 #define ARRAY_SIZE(array) ((sizeof(array))/(sizeof(array[0])))
+#include <ArduinoJson.h>
 
 /* Blynk includes */
 #define BLYNK_TEMPLATE_ID "TMPLixMwkJME"
