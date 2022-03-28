@@ -17,6 +17,12 @@ void handle_NotFound() {
 
 void handle_OnConnect() {
 
+  if (!gameEffects) {
+    server.send(200, "text/plain", "Game effects are not active on the server");
+    return;
+  }
+  
+
   if (server.hasArg("plain") == false) {
     server.send(200, "text/plain", "you did not send any data");
     return;
