@@ -16,74 +16,74 @@ void sendSystemReport() {
 
   timeClient.update();
 
-  String report;
-  report += "Son Güncellenme Tarihi : ";
-  report += getTimeStampString();
-  report += " | Local IP : ";
-  report += WiFi.localIP().toString();
-  report += " : ";
-  report += String(webServerPort);
+  String report = "Son Güncellenme Tarihi : " + getTimeStampString() + " | Local IP : " + WiFi.localIP().toString() + " : " + String(webServerPort);
 
   Blynk.virtualWrite(V9, report);
 
 }
 String getTimeStampString() {
-   time_t rawtime = timeClient.getEpochTime();
-   struct tm * ti;
-   ti = localtime (&rawtime);
+  time_t rawtime = timeClient.getEpochTime();
+  struct tm * ti;
+  ti = localtime (&rawtime);
 
-   uint16_t year = ti->tm_year + 1900;
-   String yearStr = String(year);
+  uint16_t year = ti->tm_year + 1900;
+  String yearStr = String(year);
 
-   uint8_t month = ti->tm_mon + 1;
-   String monthStr = month < 10 ? "0" + String(month) : String(month);
+  uint8_t month = ti->tm_mon + 1;
+  String monthStr = month < 10 ? "0" + String(month) : String(month);
 
-   uint8_t day = ti->tm_mday;
-   String dayStr = day < 10 ? "0" + String(day) : String(day);
+  uint8_t day = ti->tm_mday;
+  String dayStr = day < 10 ? "0" + String(day) : String(day);
 
-   uint8_t hours = ti->tm_hour;
-   String hoursStr = hours < 10 ? "0" + String(hours) : String(hours);
+  uint8_t hours = ti->tm_hour;
+  String hoursStr = hours < 10 ? "0" + String(hours) : String(hours);
 
-   uint8_t minutes = ti->tm_min;
-   String minuteStr = minutes < 10 ? "0" + String(minutes) : String(minutes);
+  uint8_t minutes = ti->tm_min;
+  String minuteStr = minutes < 10 ? "0" + String(minutes) : String(minutes);
 
-   return yearStr + "/" + monthStr + "/" + dayStr + " " +
-          hoursStr + ":" + minuteStr;
+  return yearStr + "/" + monthStr + "/" + dayStr + " " +
+         hoursStr + ":" + minuteStr;
 }
 void blynkUpdateDashBoard() {
   Blynk.virtualWrite(V0, runByTime);
-  Blynk.virtualWrite(V1, runByTime?getEffectIsTimeStatus(0):getEffectManualWorkStatus(0));
-  Blynk.virtualWrite(V2, runByTime?getEffectIsTimeStatus(1):getEffectManualWorkStatus(1));
-  Blynk.virtualWrite(V3, runByTime?getEffectIsTimeStatus(2):getEffectManualWorkStatus(2));
-  Blynk.virtualWrite(V8, runByTime?getEffectIsTimeStatus(3):getEffectManualWorkStatus(3));
-  Blynk.virtualWrite(V3, gameEffects);
-  sendSystemReport();
+  Blynk.virtualWrite(V1, activityStatus(0));
+  Blynk.virtualWrite(V2, activityStatus(1));
+  Blynk.virtualWrite(V3, activityStatus(2));
+  Blynk.virtualWrite(V8, activityStatus(3));
+  Blynk.virtualWrite(V4, gameEffects);
 }
-
+bool activityStatus(byte effectNo) {
+  return runByTime ? getEffectIsTimeStatus(effectNo) : getEffectManualWorkStatus(effectNo);
+}
 BLYNK_CONNECTED() {
-  Blynk.syncAll();
   blynkUpdateDashBoard();
+  sendSystemReport();
 }
 
 BLYNK_WRITE(V0)  {  // Zamana Göre İşleyiş
   runByTime = param.asInt();
   blynkUpdateDashBoard();
 }
-
 BLYNK_WRITE(V1)  {  // Efekt 1
-  changeEffectManualWorkStatus(0, param.asInt());
+  changeEffectManualWorkStatus(0, runByTime ? false : param.asInt());
+  Blynk.virtualWrite(V1, activityStatus(0));
 }
 
 BLYNK_WRITE(V2)  {  // Efekt 2
-  changeEffectManualWorkStatus(1, param.asInt());
+  changeEffectManualWorkStatus(1, runByTime ? false : param.asInt());
+  Blynk.virtualWrite(V2, activityStatus(1));
+  if ( getEffectManualWorkStatus(1) )
+    runEffect(1, singleUse);
 }
 
 BLYNK_WRITE(V3)  {  // Efekt 3
-  changeEffectManualWorkStatus(2, param.asInt());
+  changeEffectManualWorkStatus(2, runByTime ? false : param.asInt());
+  Blynk.virtualWrite(V3, activityStatus(2));
 }
 
 BLYNK_WRITE(V8)  {  // Efekt 4
-  changeEffectManualWorkStatus(3, param.asInt());
+  changeEffectManualWorkStatus(3, runByTime ? false : param.asInt());
+  Blynk.virtualWrite(V8, activityStatus(3));
 }
 BLYNK_WRITE(V4)  {  // Game Effects ON/OFF
   gameEffects = param.asInt();
@@ -111,4 +111,19 @@ void setManualRGB() {
 
   if (manualBlynkRGB[0] + manualBlynkRGB[1] + manualBlynkRGB[2] == 0)
     effectStopProtocol();
+}
+void updateBlinkEffectData(byte num, int idata) {
+  switch (num) {
+    case 0: Blynk.virtualWrite(V1, idata);
+      break;
+
+    case 1: Blynk.virtualWrite(V2, idata);
+      break;
+
+    case 2: Blynk.virtualWrite(V3, idata);
+      break;
+
+    case 3: Blynk.virtualWrite(V4, idata);
+      break;
+  }
 }

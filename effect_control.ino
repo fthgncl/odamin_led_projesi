@@ -21,10 +21,11 @@ void effect_control_setup() {
 void effect_control_loop() {
 
   timeClient.update();
-
+  
+  bool runTime;
   for ( byte i = 0 ; i < EFFECT_COUNTS; i++ ) {
     if (allEffects[i].enable) {
-      bool runTime = runByTime  ? allEffects[i].isTime()  : allEffects[i].manualWork;
+      runTime = runByTime  ? allEffects[i].isTime()  : allEffects[i].manualWork;
       getEffectOnOFF(i, runTime);
       if ( runTime && allEffects[i].useType == continuousUse ) {
         runEffect(i, continuousUse);
@@ -60,6 +61,8 @@ void getEffectOnOFF(byte i, bool runTime) {
       effectStartProtocol(i);
     else
       effectStopProtocol();
+      
+    updateBlinkEffectData(i, runByTime  ? allEffects[i].isTime()  : allEffects[i].manualWork );
 
   }
 }
