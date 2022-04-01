@@ -30,19 +30,19 @@ void ReelEfect()
 
 void nextPattern()
 {
-  // add one to the current pattern number, and wrap around at the end
+  // geçerli desen numarasına bir tane ekleyin ve sonuna sarın
   gCurrentPatternNumber = (gCurrentPatternNumber + 1) % ARRAY_SIZE( gPatterns);
 }
 
 void rainbow()
 {
-  // FastLED's built-in rainbow generator
+  // FastLED'in yerleşik gökkuşağı oluşturucusu
   fill_rainbow( leds, NUM_LEDS, gHue, 7);
 }
 
 void rainbowWithGlitter()
 {
-  // built-in FastLED rainbow, plus some random sparkly glitter
+  // dahili FastLED gökkuşağı ve ayrıca biraz rastgele ışıltılı parıltı
   rainbow();
   addGlitter(80);
 }
@@ -56,7 +56,7 @@ void addGlitter( fract8 chanceOfGlitter)
 
 void confetti()
 {
-  // random colored speckles that blink in and fade smoothly
+  // yanıp sönen ve düzgün bir şekilde solan rastgele renkli benekler
   fadeToBlackBy( leds, NUM_LEDS, 10);
   int pos = random16(NUM_LEDS);
   leds[pos] += CHSV( gHue + random8(64), 200, 255);
@@ -64,7 +64,7 @@ void confetti()
 
 void sinelon()
 {
-  // a colored dot sweeping back and forth, with fading trails
+  // solma izleri olan, ileri geri hareket eden renkli bir nokta
   fadeToBlackBy( leds, NUM_LEDS, 20);
   int pos = beatsin16( 13, 0, NUM_LEDS - 1 );
   leds[pos] += CHSV( gHue, 255, 192);
@@ -72,7 +72,7 @@ void sinelon()
 
 void bpm()
 {
-  // colored stripes pulsing at a defined Beats-Per-Minute (BPM)
+  // tanımlanmış bir Dakika Başına Vuruşta (BPM) titreşen renkli şeritler
   uint8_t BeatsPerMinute = 62;
   CRGBPalette16 palette = PartyColors_p;
   uint8_t beat = beatsin8( BeatsPerMinute, 64, 255);
@@ -82,11 +82,11 @@ void bpm()
 }
 
 void juggle() {
-  // eight colored dots, weaving in and out of sync with each other
+  // sekiz renkli nokta, birbirleriyle uyum içinde ve dışında dokuma
   fadeToBlackBy( leds, NUM_LEDS, 20);
   uint8_t dothue = 0;
-  for ( int i = 0; i < 8; i++) {
+  for ( int i = 0; i < 3; i++) {
     leds[beatsin16( i + 7, 0, NUM_LEDS - 1 )] |= CHSV(dothue, 200, 255);
-    dothue += 32;
+    dothue += 85;
   }
 }
