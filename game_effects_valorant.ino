@@ -14,7 +14,7 @@ void valorant_deathEffect() {
     valorant_changeAllLedsClorRed(255);
     delay(random(30,80));
   }
-  delay(1000);
+  delay(500);
   while ( leds[0].r >= 3 ) {
     valorant_changeAllLedsClorRed(leds[0].r - 3);
   }
