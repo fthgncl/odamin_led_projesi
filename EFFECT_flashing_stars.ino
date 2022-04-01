@@ -1,95 +1,12 @@
-byte parlayacakYildizlar[10][2];
-#define parlaklikDegeri 150
-int yildizPariltisiSayaci = 0;
-byte yildizPariltisiGiris = 0;
-
-
-void yildizPariltisiOnAyar() {
-  int led;
-  for ( int i = 0 ; i < ARRAY_SIZE(parlayacakYildizlar) ; i ++ ) {
-    flashingStars();
-    led = parlayacakYildizlar[i][0];
-    for (int j = 0; j < 3; j++) {
-      leds[led][j] = int(i * (2 * parlaklikDegeri / ARRAY_SIZE(parlayacakYildizlar)));
-    }
-  }
-
-  leds[0].setRGB(0, 0, 0);
-}
-
-
+int flashingStarsPeriot;
 void flashingStars() {
-  if ( yildizPariltisiGiris == 1 ) {
-    yildizPariltisiGiris = 2;
-    yildizPariltisiOnAyar();
-  }
-  else
-    isikSiddetiniAyarla();
-
-  int katman = bostaKatmanBul();
-  if ( katman == -1 )
+  flashingStarsPeriot++;
+  if ( flashingStarsPeriot % 5 != 0 )
     return;
-
-
-  parlayacakYildizlar[katman][1] = 1;
-
-  int led = 0;
-  while ( !led ) {
-    led = bostaLedBul(0, 232);
-    parlayacakYildizlar[katman][0] = led;
-  }
-}
-
-void isikSiddetiniAyarla() {
-
-  if ( yildizPariltisiSayaci >= ARRAY_SIZE(parlayacakYildizlar ) - 1 ) {
-    yildizPariltisiSayaci = 0;
-    yildizSenktronizesiKontrolu();
-  }
-  else yildizPariltisiSayaci++;
-
-  int katman = yildizPariltisiSayaci;
-  int led = parlayacakYildizlar[katman][0];
-
-  for (int i = 0; i < 3; i++) {
-    leds[led][i] += 1 * (parlayacakYildizlar[katman][1] == 1) ? 1 : -1;
-  }
-
-  if ( leds[led].r >= parlaklikDegeri || leds[led].g >= parlaklikDegeri || leds[led].b >= parlaklikDegeri )
-    parlayacakYildizlar[katman][1] = 0;
-  else if ( leds[led].r <= 0 && leds[led].g <= 0 && leds[led].b <= 0 ) {
-    parlayacakYildizlar[katman][0] = 0;
-  }
-}
-void yildizSenktronizesiKontrolu() {
-  int led1 = parlayacakYildizlar[2][0];
-  int led2 = parlayacakYildizlar[1][0];
-
-  if ( leds[led1].r == leds[led2].r && leds[led1].g == leds[led2].g && leds[led1].b == leds[led2].b ) {
-    yildizPariltisiOnAyar();
-  }
-
-}
-int bostaLedBul(int baslangic, int bitis) {
-  int ledNo = random(baslangic, bitis);
-
-  for ( int i = 0 ; i < ARRAY_SIZE(parlayacakYildizlar) ; i ++ ) {
-    if ( parlayacakYildizlar[i][0] == ledNo ) {
-      ledNo = 0;
-      break;
-    }
-  }
-
-  return ledNo;
-}
-int bostaKatmanBul() {
-  int katman = -1;
-  for ( int i = 0 ; i < ARRAY_SIZE(parlayacakYildizlar) ; i ++ ) {
-    if ( parlayacakYildizlar[i][0] == 0 ) {
-      katman = i;
-      parlayacakYildizlar[i][1] = 1;
-      break;
-    }
-  }
-  return katman;
+    
+  flashingStarsPeriot = 0;
+  
+  fadeToBlackBy( leds, 232, 10);
+  int pos = random16(232);
+  leds[pos] += CHSV( random8(128), random8(128), random8(128));
 }
