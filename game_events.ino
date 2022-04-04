@@ -1,9 +1,9 @@
 CRGB ledsCopy[NUM_LEDS];
 
-void getEvent(int gameID , int effectNo ) {
+void getEvent(int gameID , String event ) {
   gameEffectStartProtocol();
   switch (gameID) {
-    case 21640 : valorantEffect(effectNo);
+    case 21640 : valorantEffect(event);
       break;
   }
   delay(2000);
