@@ -5,6 +5,7 @@ char pass[] = "ist34ank06";
 byte manualBlynkRGB[3];
 
 void blynk_setup() {
+  WiFi.mode(WIFI_STA);
   Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
 }
 

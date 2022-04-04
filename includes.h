@@ -12,11 +12,13 @@
 bool gameEffects = true;
 /***********************/
 
-/* WebServer includes */
+/* Async WebServer includes */
 #include <ESP8266WiFi.h>
-#include <ESP8266WebServer.h>
-#define webServerPort 3000
-ESP8266WebServer server(webServerPort);
+#include <ESPAsyncTCP.h>
+#include <ESPAsyncWebServer.h>
+#include <AsyncElegantOTA.h>
+#define webServerPort 80
+AsyncWebServer server(webServerPort);
 /***********************/
 
 /* NTP Client includes */
