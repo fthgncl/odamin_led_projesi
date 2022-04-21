@@ -36,6 +36,7 @@ NTPClient timeClient(ntpUDP, "pool.ntp.org", 3600*GMT);
 /* FastLED includes */
 #include <FastLED.h>
 #define NUM_LEDS 290
+#define MAX_AMPER 20
 #define DATA_PIN D7
 #define LED_TYPE WS2812B
 CRGB leds[NUM_LEDS];
