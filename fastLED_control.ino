@@ -1,5 +1,5 @@
 void fastled_setup(){
-  FastLED.addLeds<LED_TYPE, DATA_PIN, GRB>(leds, NUM_LEDS);
+  FastLED.addLeds<LED_TYPE, LED_DATA_PIN, GRB>(leds, NUM_LEDS);
   FastLED.setMaxPowerInVoltsAndMilliamps(5,MAX_AMPER*1000);
   delay(1000);
   clearLeds();
