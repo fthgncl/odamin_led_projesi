@@ -8,11 +8,13 @@ void setup() {
   fastled_setup();
   startanimation();
   effect_control_setup();
+  sound_sensor_setup();
   web_server_setup();
 }
 void loop() {
   
   blynk_loop();
+  sound_sensor_loop();
   effect_control_loop();
   web_server_loop();
   FastLED.show();
