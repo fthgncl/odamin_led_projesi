@@ -7,6 +7,7 @@ byte manualBlynkRGB[3];
 void blynk_setup() {
   WiFi.mode(WIFI_STA);
   Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
+  printBlynkConsole("");
 }
 
 void blynk_loop() {
@@ -106,6 +107,9 @@ BLYNK_WRITE(V7)  {
   setManualRGB();
 }
 
+void printBlynkConsole(String message){
+  Blynk.virtualWrite(V11,message);
+}
 void setManualRGB() {
   if ( runByTime )
     return;
