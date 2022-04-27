@@ -16,7 +16,6 @@ void loop() {
   blynk_loop();
   sound_sensor_loop();
   effect_control_loop();
-  web_server_loop();
   FastLED.show();
   
 }

@@ -1,4 +1,5 @@
 #define ARRAY_SIZE(array) ((sizeof(array))/(sizeof(array[0])))
+#include <AsyncJson.h>
 #include <ArduinoJson.h>
 
 /* Blynk includes */
