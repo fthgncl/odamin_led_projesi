@@ -52,6 +52,7 @@ void blynkUpdateDashBoard() {
   Blynk.virtualWrite(V3, activityStatus(2));
   Blynk.virtualWrite(V8, activityStatus(3));
   Blynk.virtualWrite(V10, activityStatus(4));
+  Blynk.virtualWrite(V12, activityStatus(5));
   Blynk.virtualWrite(V4, gameEffects);
 }
 bool activityStatus(byte effectNo) {
@@ -90,6 +91,10 @@ BLYNK_WRITE(V8)  {  // Efekt 4
 BLYNK_WRITE(V10)  {  // Efekt 5
   changeEffectManualWorkStatus(4, runByTime ? false : param.asInt());
   Blynk.virtualWrite(V10, activityStatus(4));
+}
+BLYNK_WRITE(V12)  {  // Efekt 6
+  changeEffectManualWorkStatus(5, runByTime ? false : param.asInt());
+  Blynk.virtualWrite(V12, activityStatus(5));
 }
 BLYNK_WRITE(V4)  {  // Game Effects ON/OFF
   gameEffects = param.asInt();
@@ -132,10 +137,13 @@ void updateBlinkEffectData(byte num, int idata) {
     case 2: Blynk.virtualWrite(V3, idata);
       break;
 
-    case 3: Blynk.virtualWrite(V4, idata);
+    case 3: Blynk.virtualWrite(V8, idata);
       break;
 
     case 4: Blynk.virtualWrite(V10, idata);
+      break;
+
+    case 5: Blynk.virtualWrite(V12, idata);
       break;
   }
 }

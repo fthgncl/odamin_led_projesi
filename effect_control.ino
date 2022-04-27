@@ -1,4 +1,4 @@
-#define EFFECT_COUNTS 5
+#define EFFECT_COUNTS 6
 
 Effect allEffects[EFFECT_COUNTS];
 bool firtTimeEffect[EFFECT_COUNTS];
@@ -12,13 +12,16 @@ void effect_control_setup() {
   allEffects[1].addWorkTime(04, 20, 06, 20);
 
   allEffects[2].create(continuousUse);  /// Flashing Stars
-  allEffects[2].addWorkTime(21, 00, 00, 30);
+  allEffects[2].addWorkTime(23, 00, 00, 30);
 
   allEffects[3].create(continuousUse);  /// Dynamic Circle
-  allEffects[3].addWorkTime(21, 00, 23, 30);
+  allEffects[3].addWorkTime(23, 00, 23, 30);
 
   allEffects[4].create(continuousUse);  /// Wandering Spots
   allEffects[4].addWorkTime(12, 00, 19, 00);
+
+  allEffects[5].create(continuousUse);  /// Partly Cloudy
+  allEffects[5].addWorkTime(21, 00, 23, 00);
 
 }
 void effect_control_loop() {
@@ -53,6 +56,8 @@ void runEffect(byte num, bool useType) {
       case 3 : dynamic_circle_loop();
         break;
       case 4 : wandering_spots_setup();
+        break;
+      case 5 : partly_cloudy();
         break;
     }
   }
