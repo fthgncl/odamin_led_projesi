@@ -75,6 +75,9 @@ void rastgeleRenkOlustur() {
   }
 
 }
+void dynamic_circle_setup(){
+  
+}
 void dynamic_circle_loop() {
 
   if ( harAvizeSayac == 0 ) {

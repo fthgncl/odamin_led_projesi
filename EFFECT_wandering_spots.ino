@@ -1,4 +1,6 @@
 void wandering_spots_setup() {
+}
+void wandering_spots_loop() {
   fadeToBlackBy( leds, NUM_LEDS, 10);
   uint8_t dothue = 0;
   for ( int i = 0; i < 3; i++) {

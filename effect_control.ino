@@ -1,64 +1,28 @@
-#define EFFECT_COUNTS 6
 
-Effect allEffects[EFFECT_COUNTS];
-bool firtTimeEffect[EFFECT_COUNTS];
+
+bool firtTimeEffect[MAX_EFFECT_COUNTS];
 
 void effect_control_setup() {
 
-  allEffects[0].create(continuousUse);  /// DemoReel
-  allEffects[0].addWorkTime(19, 00, 21, 00);
-
-  allEffects[1].create(singleUse);  /// Circle night lamb
-  allEffects[1].addWorkTime(04, 20, 06, 20);
-
-  allEffects[2].create(continuousUse);  /// Flashing Stars
-  allEffects[2].addWorkTime(23, 00, 00, 30);
-
-  allEffects[3].create(continuousUse);  /// Dynamic Circle
-  allEffects[3].addWorkTime(23, 00, 23, 30);
-
-  allEffects[4].create(continuousUse);  /// Wandering Spots
-  allEffects[4].addWorkTime(12, 00, 19, 00);
-
-  allEffects[5].create(continuousUse);  /// Partly Cloudy
-  allEffects[5].addWorkTime(21, 00, 23, 00);
+  CreateEffect(continuousUse, ReelEfect_setup, ReelEfect, V1,19, 00, 21, 00); /// DemoReel
+  CreateEffect(singleUse, avizeKemeri_setup, avizeKemeri_loop, V2,04, 20, 06, 20); /// Circle night lamb
+  CreateEffect(continuousUse, flashingStars_setup, flashingStars_loop, V3,23, 00, 04, 03); /// Flashing Stars
+  CreateEffect(continuousUse, dynamic_circle_setup, dynamic_circle_loop, V8,23, 00, 23, 30); /// Dynamic Circle
+  CreateEffect(continuousUse, wandering_spots_setup, wandering_spots_loop, V10,12, 00, 19, 00); /// Wandering Spots
+  CreateEffect(continuousUse, partly_cloudy_setup, partly_cloudy_loop, V12,21, 00, 23, 00); /// Partly Cloudy
 
 }
 void effect_control_loop() {
 
   timeClient.update();
-  
   bool runTime;
-  for ( byte i = 0 ; i < EFFECT_COUNTS; i++ ) {
+  for ( byte i = 0 ; i < MAX_EFFECT_COUNTS; i++ ) {
     if (allEffects[i].enable) {
       runTime = runByTime  ? allEffects[i].isTime()  : allEffects[i].manualWork;
       getEffectOnOFF(i, runTime);
       if ( runTime && allEffects[i].useType == continuousUse ) {
-        runEffect(i, continuousUse);
+        allEffects[i].loopFunction();
       }
-    }
-  }
-}
-void runEffect(byte num, bool useType) {
-  if ( useType == singleUse ) {       // Single Use
-    switch ( allEffects[num].id ) {
-      case 1 : avizeKemeri();
-        break;
-    }
-  }
-  else                              // Continuous Use
-  {
-    switch ( allEffects[num].id ) {
-      case 0 : ReelEfect();
-        break;
-      case 2 : flashingStars();
-        break;
-      case 3 : dynamic_circle_loop();
-        break;
-      case 4 : wandering_spots_setup();
-        break;
-      case 5 : partly_cloudy();
-        break;
     }
   }
 }
@@ -71,19 +35,19 @@ void getEffectOnOFF(byte i, bool runTime) {
       effectStartProtocol(i);
     else
       effectStopProtocol();
-      
+
     updateBlinkEffectData(i, runByTime  ? allEffects[i].isTime()  : allEffects[i].manualWork );
 
   }
 }
-void effectStartProtocol(byte num) {
-  runEffect(num, allEffects[num].useType);
+void effectStartProtocol(byte id) {
+  allEffects[id].setupFunction();
 }
 void effectStopProtocol() {
   clearLeds();
-  for ( byte i = 0 ; i < EFFECT_COUNTS ; i++ ) {
-    if ( allEffects[i].id != -1 && (runByTime  ? allEffects[i].isTime()  : allEffects[i].manualWork) && allEffects[i].useType == singleUse )
-      runEffect(i, singleUse);
+  for ( byte i = 0 ; i < MAX_EFFECT_COUNTS ; i++ ) {
+    if ( allEffects[i].enable && (runByTime  ? allEffects[i].isTime()  : allEffects[i].manualWork) && allEffects[i].useType == singleUse )
+      allEffects[i].setupFunction();
   }
 }
 

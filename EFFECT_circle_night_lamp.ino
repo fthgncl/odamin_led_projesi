@@ -1,5 +1,8 @@
 
-void avizeKemeri() {
+void avizeKemeri_loop() {
+  
+}
+void avizeKemeri_setup() {
   byte color[3];
   color[0] = random(50);
   color[1] = random(50);

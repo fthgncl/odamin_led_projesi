@@ -1,5 +1,8 @@
 int flashingStarsPeriot;
-void flashingStars() {
+void flashingStars_setup(){
+  
+}
+void flashingStars_loop() {
   flashingStarsPeriot++;
   if ( flashingStarsPeriot % 5 != 0 )
     return;

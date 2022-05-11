@@ -9,6 +9,11 @@ void blynk_setup() {
   Blynk.begin(BLYNK_AUTH_TOKEN, ssid, pass);
   printBlynkConsole("");
 }
+BLYNK_CONNECTED(){
+  Serial.println("Blynk Connected Çalıştı...");
+  blynkUpdateDashBoard();
+  sendSystemReport();
+}
 
 void blynk_loop() {
   Blynk.run();
@@ -17,11 +22,9 @@ void blynk_loop() {
 void sendSystemReport() {
 
   timeClient.update();
-
-  Blynk.virtualWrite(V9,"Son Güncellenme Tarihi : " + getTimeStampString() + " | Local IP : " + WiFi.localIP().toString() + " : " + String(webServerPort));
-
-
+  Blynk.virtualWrite(V9, "Son Güncellenme Tarihi : " + getTimeStampString() + " | Local IP : " + WiFi.localIP().toString());
 }
+
 String getTimeStampString() {
   time_t rawtime = timeClient.getEpochTime();
   struct tm * ti;
@@ -47,55 +50,34 @@ String getTimeStampString() {
 }
 void blynkUpdateDashBoard() {
   Blynk.virtualWrite(V0, runByTime);
-  Blynk.virtualWrite(V1, activityStatus(0));
-  Blynk.virtualWrite(V2, activityStatus(1));
-  Blynk.virtualWrite(V3, activityStatus(2));
-  Blynk.virtualWrite(V8, activityStatus(3));
-  Blynk.virtualWrite(V10, activityStatus(4));
-  Blynk.virtualWrite(V12, activityStatus(5));
   Blynk.virtualWrite(V4, gameEffects);
+
+  for ( byte i = 0 ; i < MAX_EFFECT_COUNTS ; i++ ) {
+    if ( allEffects[i].id != -1 ) {
+      Blynk.virtualWrite(allEffects[i].blynkVirtualPIN, allEffects[i].enable ? activityStatus(i) : false);
+    }
+  }
 }
 bool activityStatus(byte effectNo) {
   return runByTime ? getEffectIsTimeStatus(effectNo) : getEffectManualWorkStatus(effectNo);
-}
-BLYNK_CONNECTED() {
-  blynkUpdateDashBoard();
-  sendSystemReport();
 }
 
 BLYNK_WRITE(V0)  {  // Zamana Göre İşleyiş
   runByTime = param.asInt();
   blynkUpdateDashBoard();
 }
-BLYNK_WRITE(V1)  {  // Efekt 1
-  changeEffectManualWorkStatus(0, runByTime ? false : param.asInt());
-  Blynk.virtualWrite(V1, activityStatus(0));
+BLYNK_WRITE_DEFAULT()
+{
+  int pin = request.pin;
+  int value = param.asInt();
+  for ( byte i = 0 ; i < MAX_EFFECT_COUNTS ; i++ ) {
+    if ( allEffects[i].blynkVirtualPIN == pin ) {
+      changeEffectManualWorkStatus(i, runByTime ? false : value);
+      Blynk.virtualWrite(pin, activityStatus(i));
+    }
+  }
 }
 
-BLYNK_WRITE(V2)  {  // Efekt 2
-  changeEffectManualWorkStatus(1, runByTime ? false : param.asInt());
-  Blynk.virtualWrite(V2, activityStatus(1));
-  if ( getEffectManualWorkStatus(1) )
-    runEffect(1, singleUse);
-}
-
-BLYNK_WRITE(V3)  {  // Efekt 3
-  changeEffectManualWorkStatus(2, runByTime ? false : param.asInt());
-  Blynk.virtualWrite(V3, activityStatus(2));
-}
-
-BLYNK_WRITE(V8)  {  // Efekt 4
-  changeEffectManualWorkStatus(3, runByTime ? false : param.asInt());
-  Blynk.virtualWrite(V8, activityStatus(3));
-}
-BLYNK_WRITE(V10)  {  // Efekt 5
-  changeEffectManualWorkStatus(4, runByTime ? false : param.asInt());
-  Blynk.virtualWrite(V10, activityStatus(4));
-}
-BLYNK_WRITE(V12)  {  // Efekt 6
-  changeEffectManualWorkStatus(5, runByTime ? false : param.asInt());
-  Blynk.virtualWrite(V12, activityStatus(5));
-}
 BLYNK_WRITE(V4)  {  // Game Effects ON/OFF
   gameEffects = param.asInt();
 }
@@ -112,8 +94,8 @@ BLYNK_WRITE(V7)  {
   setManualRGB();
 }
 
-void printBlynkConsole(String message){
-  Blynk.virtualWrite(V11,message);
+void printBlynkConsole(String message) {
+  Blynk.virtualWrite(V11, message);
 }
 void setManualRGB() {
   if ( runByTime )
@@ -127,23 +109,5 @@ void setManualRGB() {
     effectStopProtocol();
 }
 void updateBlinkEffectData(byte num, int idata) {
-  switch (num) {
-    case 0: Blynk.virtualWrite(V1, idata);
-      break;
-
-    case 1: Blynk.virtualWrite(V2, idata);
-      break;
-
-    case 2: Blynk.virtualWrite(V3, idata);
-      break;
-
-    case 3: Blynk.virtualWrite(V8, idata);
-      break;
-
-    case 4: Blynk.virtualWrite(V10, idata);
-      break;
-
-    case 5: Blynk.virtualWrite(V12, idata);
-      break;
-  }
+  Blynk.virtualWrite(allEffects[num].blynkVirtualPIN, idata);
 }

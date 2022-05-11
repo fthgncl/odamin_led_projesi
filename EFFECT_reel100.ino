@@ -7,6 +7,9 @@ SimplePatternList gPatterns = { rainbow, rainbowWithGlitter, confetti, sinelon, 
 uint8_t gCurrentPatternNumber = 0; // Index number of which pattern is current
 uint8_t gHue = 0; // rotating "base color" used by many of the patterns
 
+void ReelEfect_setup(){
+  
+}
 void ReelEfect()
 {
   // Call the current pattern function once, updating the 'leds' array
