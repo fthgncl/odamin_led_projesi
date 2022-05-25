@@ -5,10 +5,10 @@ bool firtTimeEffect[MAX_EFFECT_COUNTS];
 void effect_control_setup() {
 
   CreateEffect(continuousUse, ReelEfect_setup, ReelEfect, V1,19, 00, 21, 00); /// DemoReel
-  CreateEffect(singleUse, avizeKemeri_setup, avizeKemeri_loop, V2,04, 20, 06, 20); /// Circle night lamb
-  CreateEffect(continuousUse, flashingStars_setup, flashingStars_loop, V3,23, 00, 04, 03); /// Flashing Stars
+  CreateEffect(singleUse, avizeKemeri_setup, avizeKemeri_loop, V2,04, 30, 05, 10); /// Circle night lamb
+  CreateEffect(continuousUse, flashingStars_setup, flashingStars_loop, V3,23, 00, 00, 00); /// Flashing Stars
   CreateEffect(continuousUse, dynamic_circle_setup, dynamic_circle_loop, V8,23, 00, 23, 30); /// Dynamic Circle
-  CreateEffect(continuousUse, wandering_spots_setup, wandering_spots_loop, V10,12, 00, 19, 00); /// Wandering Spots
+  CreateEffect(continuousUse, wandering_spots_setup, wandering_spots_loop, V10,16, 00, 19, 00); /// Wandering Spots
   CreateEffect(continuousUse, partly_cloudy_setup, partly_cloudy_loop, V12,21, 00, 23, 00); /// Partly Cloudy
 
 }
