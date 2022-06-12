@@ -10,6 +10,7 @@ void effect_control_setup() {
   CreateEffect(continuousUse, dynamic_circle_setup, dynamic_circle_loop, V8,23, 00, 23, 30); /// Dynamic Circle
   CreateEffect(continuousUse, wandering_spots_setup, wandering_spots_loop, V10,16, 00, 19, 00); /// Wandering Spots
   CreateEffect(continuousUse, partly_cloudy_setup, partly_cloudy_loop, V12,21, 00, 23, 00); /// Partly Cloudy
+  CreateEffect(continuousUse, random_moving_light_setup, random_moving_light_loop, V13,23, 30, 00, 00); /// Random Moving Light
 
 }
 void effect_control_loop() {

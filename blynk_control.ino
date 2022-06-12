@@ -93,6 +93,10 @@ BLYNK_WRITE(V7)  {
   manualBlynkRGB[2] = param.asInt();
   setManualRGB();
 }
+BLYNK_WRITE(V14)  {
+  leds[param.asInt()].setRGB(beatsin8(60,0,255,0,0),beatsin8(60,0,255,0,85),beatsin8(60,0,255,0,170));
+  FastLED.show();
+}
 
 void printBlynkConsole(String message) {
   Blynk.virtualWrite(V11, message);
