@@ -2,6 +2,8 @@
 #include <AsyncJson.h>
 #include <ArduinoJson.h>
 
+#define buttonPIN D6
+
 /* Blynk includes */
 #define BLYNK_FIRMWARE_VERSION "0.1"
 #define BLYNK_TEMPLATE_ID "TMPLixMwkJME"

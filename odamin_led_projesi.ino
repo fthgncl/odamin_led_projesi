@@ -15,5 +15,9 @@ void loop() {
   blynk_loop();
   effect_control_loop();
   FastLED.show();
+
+  EVERY_N_MILLISECONDS(50){
+    button_control();
+  }
   
 }
