@@ -1,7 +1,7 @@
 unsigned long lastMoment = 0;
 unsigned long nowMoment = 0;
 
-bool firtTimeEffect[MAX_EFFECT_COUNTS];
+bool firstTimeEffect[MAX_EFFECT_COUNTS];
 
 void effect_control_setup() {
 
@@ -37,10 +37,10 @@ void updateTime() {
 }
 void getEffectOnOFF(byte i, bool runTime) {
 
-  if ( firtTimeEffect[i] != runTime ) {
-    firtTimeEffect[i] = runTime;
+  if ( firstTimeEffect[i] != runTime ) {
+    firstTimeEffect[i] = runTime;
 
-    if ( firtTimeEffect[i] )
+    if ( firstTimeEffect[i] )
       effectStartProtocol(i);
     else
       effectStopProtocol();
