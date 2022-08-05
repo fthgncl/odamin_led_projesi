@@ -12,10 +12,11 @@ void prayerTimesUpdate() {
 
     if (httpCode > 0) {
       gununNamazVakitleriniCek(http.getString());
+      Serial.println("Namaz vakitleri çekildi");
     }
     else 
     {
-      Serial.println("Error on HTTP request");
+      Serial.println("Namaz vakiti sunucusuna gönderilen istekte hata oluştu.");
     }
 
     http.end();

@@ -10,7 +10,6 @@ void blynk_setup() {
   printBlynkConsole("");
 }
 BLYNK_CONNECTED(){
-  Serial.println("Blynk Connected Çalıştı...");
   blynkUpdateDashBoard();
   sendSystemReport();
 }
