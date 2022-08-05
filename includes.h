@@ -49,3 +49,14 @@ CRGB leds[NUM_LEDS];
 #include <FastLED.h>
 #define SOUND_SENSOR_DATA_PIN D6
 /***********************/
+
+/* Prayer Times includes */
+#include <ESP8266HTTPClient.h>
+#define IMSAK 0
+#define GUNES 1
+#define OGLE 2
+#define IKINDI 3
+#define AKSAM 4
+#define YATSI 5
+int namazVakti[6][2];
+/***********************/

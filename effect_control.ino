@@ -6,7 +6,7 @@ bool firstTimeEffect[MAX_EFFECT_COUNTS];
 void effect_control_setup() {
 
   CreateEffect(continuousUse, ReelEfect_setup, ReelEfect, V1, 19, 00, 21, 00); /// DemoReel
-  CreateEffect(singleUse, avizeKemeri_setup, avizeKemeri_loop, V2, 04, 30, 05, 10); /// Circle night lamb
+  CreateEffect(singleUse, avizeKemeri_setup, avizeKemeri_loop, V2, namazVakti[IMSAK][0], namazVakti[IMSAK][1], namazVakti[GUNES][0], namazVakti[GUNES][1]); /// Circle night lamb
   CreateEffect(continuousUse, flashingStars_setup, flashingStars_loop, V3, 23, 00, 00, 00); /// Flashing Stars
   CreateEffect(continuousUse, dynamic_circle_setup, dynamic_circle_loop, V8, 23, 00, 23, 30); /// Dynamic Circle
   CreateEffect(continuousUse, wandering_spots_setup, wandering_spots_loop, V10, 16, 00, 19, 00); /// Wandering Spots

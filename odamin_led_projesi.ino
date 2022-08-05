@@ -9,6 +9,7 @@ void setup() {
   fastled_setup();
   startanimation();
   web_server_setup();
+  prayerTimesUpdate();
 }
 void loop() {
   
