@@ -23,9 +23,9 @@ class Effect
     void (* loopFunction)();
     int blynkVirtualPIN;
 
-    void build(byte useType, void (* EFF_setupFunctioncs)() , void (* EFF_loopFunction)(), int EFF_blynkVirtualPIN, byte startHour = 0, byte startMinute = 0 , byte endHour = 0 , byte endMinute = 0) {
+    void build(byte useType, void (* EFF_setupFunctioncs)() , void (* EFF_loopFunction)(), int EFF_blynkVirtualPIN, byte startHour = 0, byte startMinute = 0 , byte endHour = 0 , byte endMinute = 0 , int id = effectCount) {
       this->enable = true;
-      this->id = effectCount;
+      this->id = id;
       this->useType = useType;
       this->manualWork = false;
       this->setupFunction = EFF_setupFunctioncs;
@@ -62,5 +62,27 @@ Effect CreateEffect(byte useType, void (* setupFunction)() , void (* loopFunctio
   allEffects[effectCount].build(useType, setupFunction, loopFunction, blynkVirtualPIN, startHour, startMinute, endHour, endMinute);
   return allEffects[effectCount - 1];
 }
+void changeEffectTimes(byte effectLayer , byte startHour = 0, byte startMinute = 0 , byte endHour = 0 , byte endMinute = 0 ) {
+  allEffects[effectLayer].build(allEffects[effectLayer].useType, allEffects[effectLayer].setupFunction , allEffects[effectLayer].loopFunction, allEffects[effectLayer].blynkVirtualPIN, startHour, startMinute, endHour, endMinute, allEffects[effectLayer].id);
+}
 
+int findEffectIDLayerVirtualPin(int blynkVirtualPIN) {
+  for ( byte i = 0 ; i < MAX_EFFECT_COUNTS ; i++ )
+    if ( allEffects[i].id != -1 )
+      if (allEffects[i].blynkVirtualPIN == blynkVirtualPIN)
+        return i;
+
+  return -1;
+}
+byte findEmptyLayer() {
+  for ( byte i = 0 ; i < MAX_EFFECT_COUNTS ; i++ )
+    if ( allEffects[i].id == -1 )
+      return i;
+
+  return -1;
+}
+void deleteLayer(byte layer) {
+  if ( layer < MAX_EFFECT_COUNTS )
+    allEffects[layer].id = -1;
+}
 #endif
