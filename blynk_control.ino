@@ -114,3 +114,8 @@ void setManualRGB() {
 void updateBlinkEffectData(byte num, int idata) {
   Blynk.virtualWrite(allEffects[num].blynkVirtualPIN, idata);
 }
+
+BLYNK_WRITE(V30)  {  // Bina Kapisi
+  binaKapisiniAc();
+  Blynk.virtualWrite(V30, false);
+}
