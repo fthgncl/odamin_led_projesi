@@ -52,6 +52,8 @@ CRGB leds[NUM_LEDS];
 
 /* Prayer Times includes */
 #include <ESP8266HTTPClient.h>
+#define SAAT 0
+#define DAKIKA 1
 #define IMSAK 0
 #define GUNES 1
 #define OGLE 2
