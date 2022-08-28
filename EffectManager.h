@@ -5,13 +5,11 @@
 
 const bool singleUse = true;
 const bool continuousUse = !singleUse;
-int effectCount = 0;
 bool runByTime = true;
 
 class Effect
 {
   public:
-
 
     bool enable = false;
     bool useType; // true : single use , false continuous use
@@ -23,21 +21,20 @@ class Effect
     void (* loopFunction)();
     int blynkVirtualPIN;
 
-    void build(byte useType, void (* EFF_setupFunctioncs)(byte layer) , void (* EFF_loopFunction)(), int EFF_blynkVirtualPIN, byte startHour = 0, byte startMinute = 0 , byte endHour = 0 , byte endMinute = 0 , int id = effectCount) {
+    void build(byte useType, void (* EFF_setupFunctioncs)(byte layer) , void (* EFF_loopFunction)(), int EFF_blynkVirtualPIN, int emptyLayer , float startTime = -1.0, float endTime = -1.0) {
       this->enable = true;
-      this->id = id;
+      this->id = emptyLayer;
       this->useType = useType;
       this->manualWork = false;
       this->setupFunction = EFF_setupFunctioncs;
       this->loopFunction = EFF_loopFunction;
       this->blynkVirtualPIN = EFF_blynkVirtualPIN;
 
-      if ( startHour != 0 || startMinute != 0 || endHour != 0 || endMinute != 0 ) {
-        startTime = startHour + (startMinute / 60.0);
-        endTime = endHour + (endMinute / 60.0);
+      if ( startTime != -1.0 || endTime != -1.0 ) {
+        this->startTime = startTime;
+        this->endTime = endTime;
       }
 
-      effectCount++;
     }
 
     bool isTime() {
@@ -58,26 +55,32 @@ class Effect
     }
 };
 Effect allEffects[MAX_EFFECT_COUNTS];
-Effect CreateEffect(byte useType, void (* setupFunction)(byte layer) , void (* loopFunction)(), int blynkVirtualPIN, byte startHour = 0, byte startMinute = 0 , byte endHour = 0 , byte endMinute = 0) {
-  allEffects[effectCount].build(useType, setupFunction, loopFunction, blynkVirtualPIN, startHour, startMinute, endHour, endMinute);
-  return allEffects[effectCount - 1];
+int findEmptyLayer() {
+  for ( byte i = 0 ; i < MAX_EFFECT_COUNTS ; i++ )
+    if ( allEffects[i].id == -1 )
+      return i;
+
+  return -1;
+}
+float calculateTime(byte Hour , byte Minute) {
+  return (Hour + (Minute / 60.0));
+}
+void CreateEffect(byte useType, void (* setupFunction)(byte layer) , void (* loopFunction)(), int blynkVirtualPIN, byte startHour = 0, byte startMinute = 0 , byte endHour = 0 , byte endMinute = 0) {
+  int layer = findEmptyLayer();
+  if ( layer == -1 )
+    Serial.println("Eklenmeye çalışan efekt için boş katman bulunamadı.");
+  else
+    allEffects[layer].build(useType, setupFunction, loopFunction, blynkVirtualPIN, layer , calculateTime(startHour, startMinute), calculateTime(endHour, endMinute));
+
 }
 void changeEffectTimes(byte effectLayer , byte startHour = 0, byte startMinute = 0 , byte endHour = 0 , byte endMinute = 0 ) {
-  allEffects[effectLayer].build(allEffects[effectLayer].useType, allEffects[effectLayer].setupFunction , allEffects[effectLayer].loopFunction, allEffects[effectLayer].blynkVirtualPIN, startHour, startMinute, endHour, endMinute, allEffects[effectLayer].id);
+  allEffects[effectLayer].build(allEffects[effectLayer].useType, allEffects[effectLayer].setupFunction , allEffects[effectLayer].loopFunction, allEffects[effectLayer].blynkVirtualPIN, allEffects[effectLayer].id, calculateTime(startHour, startMinute), calculateTime(endHour, endMinute));
 }
-
 int findEffectIDLayerVirtualPin(int blynkVirtualPIN) {
   for ( byte i = 0 ; i < MAX_EFFECT_COUNTS ; i++ )
     if ( allEffects[i].id != -1 )
       if (allEffects[i].blynkVirtualPIN == blynkVirtualPIN)
         return i;
-
-  return -1;
-}
-byte findEmptyLayer() {
-  for ( byte i = 0 ; i < MAX_EFFECT_COUNTS ; i++ )
-    if ( allEffects[i].id == -1 )
-      return i;
 
   return -1;
 }
