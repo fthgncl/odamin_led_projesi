@@ -1,4 +1,5 @@
-void wandering_spots_setup() {
+void wandering_spots_setup(byte effectID) {
+  Serial.println(effectID);
 }
 void wandering_spots_loop() {
   fadeToBlackBy( leds, NUM_LEDS, 10);

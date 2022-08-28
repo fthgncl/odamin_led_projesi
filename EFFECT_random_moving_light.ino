@@ -8,7 +8,7 @@ int led = 0;
 int yol = 0;
 bool yon = true;
 int rotalar[ROTA_ADETI][2];
-int yollar[YOL_ADETI][2] =
+int yollar[YOL_ADETI][2]
 {
   {0, 36},
   {36, 79},
@@ -30,8 +30,8 @@ int kesisimNoktalari[][2] =
   {83, 218},
   {234, 289}
 };
-void random_moving_light_setup() {
-
+void random_moving_light_setup(byte effectID) {
+  Serial.println(effectID);
 }
 void random_moving_light_loop() {
 
@@ -50,8 +50,8 @@ void ledYurut(int baslangic , int bitis ) {
     Serial.print(_yon ? baslangic : bitis);
     Serial.print(" || Bitis : ");
     Serial.println(!_yon ? baslangic : bitis);*/
-  led = beatsin16(dalgasalHiz, _yon ? baslangic : bitis, !_yon ? baslangic : bitis , _yon ? 0 : 60000 / dalgasalHiz , 0);
-  //led = !_yon ? baslangic : bitis;
+  //led = beatsin16(dalgasalHiz, _yon ? baslangic : bitis, !_yon ? baslangic : bitis , _yon ? 0 : 60000 / dalgasalHiz , 0);
+  led += !_yon ? 1 : -1;
   leds[led].setRGB(random(100), random(100), random(100));
   Serial.println(led);
 }

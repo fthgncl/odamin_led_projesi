@@ -4,7 +4,8 @@ unsigned long nowTime = 0;
 #define nextCloudDelay 5000
 int grup = 0;
 
-void partly_cloudy_setup() {
+void partly_cloudy_setup(byte effectID) {
+  Serial.println(effectID);
 }
 void partly_cloudy_loop(){
   nowTime = millis();

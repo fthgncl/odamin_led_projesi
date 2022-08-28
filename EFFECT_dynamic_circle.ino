@@ -1,7 +1,8 @@
 #define avizeLedBaslangic 235
 #define avizeLedBitis 289
 byte cemberSayaci = 0;
-void dynamic_circle_setup() {
+void dynamic_circle_setup(byte effectID) {
+  Serial.println(effectID);
 }
 void dynamic_circle_loop()
 {

@@ -19,11 +19,11 @@ class Effect
     bool manualWork;
     float startTime = -1.0;
     float endTime = -1.0;
-    void (* setupFunction)();
+    void (* setupFunction)(byte layer);
     void (* loopFunction)();
     int blynkVirtualPIN;
 
-    void build(byte useType, void (* EFF_setupFunctioncs)() , void (* EFF_loopFunction)(), int EFF_blynkVirtualPIN, byte startHour = 0, byte startMinute = 0 , byte endHour = 0 , byte endMinute = 0 , int id = effectCount) {
+    void build(byte useType, void (* EFF_setupFunctioncs)(byte layer) , void (* EFF_loopFunction)(), int EFF_blynkVirtualPIN, byte startHour = 0, byte startMinute = 0 , byte endHour = 0 , byte endMinute = 0 , int id = effectCount) {
       this->enable = true;
       this->id = id;
       this->useType = useType;
@@ -58,7 +58,7 @@ class Effect
     }
 };
 Effect allEffects[MAX_EFFECT_COUNTS];
-Effect CreateEffect(byte useType, void (* setupFunction)() , void (* loopFunction)(), int blynkVirtualPIN, byte startHour = 0, byte startMinute = 0 , byte endHour = 0 , byte endMinute = 0) {
+Effect CreateEffect(byte useType, void (* setupFunction)(byte layer) , void (* loopFunction)(), int blynkVirtualPIN, byte startHour = 0, byte startMinute = 0 , byte endHour = 0 , byte endMinute = 0) {
   allEffects[effectCount].build(useType, setupFunction, loopFunction, blynkVirtualPIN, startHour, startMinute, endHour, endMinute);
   return allEffects[effectCount - 1];
 }

@@ -1,6 +1,6 @@
 int flashingStarsPeriot;
-void flashingStars_setup(){
-  
+void flashingStars_setup(byte effectID) {
+  Serial.println(effectID);
 }
 void flashingStars_loop() {
   flashingStarsPeriot++;

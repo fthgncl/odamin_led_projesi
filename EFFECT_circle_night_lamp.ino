@@ -2,7 +2,8 @@
 void avizeKemeri_loop() {
   
 }
-void avizeKemeri_setup() {
+void avizeKemeri_setup(byte effectID) {
+  Serial.println(effectID);
   byte color[3];
   color[0] = random(50);
   color[1] = random(50);
