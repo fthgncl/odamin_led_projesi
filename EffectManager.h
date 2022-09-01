@@ -21,11 +21,11 @@ class Effect
     void (* loopFunction)();
     int blynkVirtualPIN;
 
-    void build(byte useType, void (* EFF_setupFunctioncs)(byte layer) , void (* EFF_loopFunction)(), int EFF_blynkVirtualPIN, int emptyLayer , float startTime = -1.0, float endTime = -1.0) {
+    void build(byte useType, void (* EFF_setupFunctioncs)(byte layer) , void (* EFF_loopFunction)(), int EFF_blynkVirtualPIN, int emptyLayer , float startTime = -1.0, float endTime = -1.0, bool manualWork = false) {
       this->enable = true;
       this->id = emptyLayer;
       this->useType = useType;
-      this->manualWork = false;
+      this->manualWork = manualWork;
       this->setupFunction = EFF_setupFunctioncs;
       this->loopFunction = EFF_loopFunction;
       this->blynkVirtualPIN = EFF_blynkVirtualPIN;
