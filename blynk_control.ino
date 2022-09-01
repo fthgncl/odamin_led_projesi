@@ -1,7 +1,6 @@
-char ssid[] = "TRC";
-char pass[] = "ist34ank06";
+char ssid[] = "fthgncl";
+char pass[] = "00180018Ff";
 
-#define PIN_RunByTime = 0
 byte manualBlynkRGB[3];
 
 void blynk_setup() {
