@@ -1,5 +1,6 @@
 #define INT16_MAX 32767
 void rotalariHesapla(uint16_t yol[][2] , byte yolSize , uint16_t kesisimNoktalari[][2] , byte kesisimNoktalariSize , uint16_t sayi, uint16_t cikti[][2] , byte ciktiSize) {
+  yoluTemizle(cikti,ciktiSize);
   if (  dugumNoktasiMi(yol , yolSize , sayi) ) {
     dugumNoktasiHattiniEkle(yol , yolSize , sayi, cikti , ciktiSize);
     dugumNoktasiKesisimHatlariniEkle(yol , yolSize , kesisimNoktalari , kesisimNoktalariSize , sayi, cikti , ciktiSize);
@@ -20,6 +21,11 @@ void dugumNoktasiHattiniEkle(uint16_t yol[][2] , byte yolSize , uint16_t sayi, u
         arrayEklemeYap(cikti, ciktiSize, eklenenSayi );
         j = 2;
       }
+}
+void yoluTemizle(uint16_t yol[][2] , byte yolSize){
+    for ( byte i = 0 ; i < yolSize ; i++ )
+    for ( byte j = 0 ; j < 2 ; j++ )
+      yol[i][j] = 0;
 }
 void dugumNoktasiKesisimHatlariniEkle(uint16_t yol[][2] , byte yolSize , uint16_t kesisimNoktalari[][2] , byte kesisimNoktalariSize , uint16_t sayi, uint16_t cikti[][2] , byte ciktiSize) {
   for ( byte i = 0 ; i < kesisimNoktalariSize ; i++ )
