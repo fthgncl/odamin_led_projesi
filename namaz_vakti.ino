@@ -1,20 +1,17 @@
-
-
-
 void prayerTimesUpdate() {
 
   if ((WiFi.status() == WL_CONNECTED)) {
     WiFiClient client;
     HTTPClient http;
 
-    http.begin(client, "http://namaz-vakti-api.herokuapp.com/data?region=9541");
+    http.begin(client, "http://ezanvakti.herokuapp.com/vakitler/9541");
     int httpCode = http.GET();
 
     if (httpCode > 0) {
       gununNamazVakitleriniCek(http.getString());
       Serial.println("Namaz vakitleri çekildi");
     }
-    else 
+    else
     {
       Serial.println("Namaz vakiti sunucusuna gönderilen istekte hata oluştu.");
     }
@@ -22,51 +19,39 @@ void prayerTimesUpdate() {
     http.end();
   }
 }
-void gununNamazVakitleriniCek(String payload) {
-  byte tirnakSayaci = 0;
-  byte vakitNo = 0;
-  bool saatBirimi = 0;
-  bool ondalikBirimi = 0;
-  char saat[2];
-  char dakika[2];
-  for ( int i = 0 ; tirnakSayaci < 14 ; i++ ) {
-    delay(100);
-    if ( payload[i] == '\"' ) {
-      saatBirimi = 0;
-      tirnakSayaci++;
-      i++;
-    }
+void gununNamazVakitleriniCek(String data) {
+  koseliParantezKaldir(data);
+  ilkJsonTaniminiBul(data);
 
-    if ( payload[i] == ':' ) {
-      saatBirimi = 1;
-      i++;
-    }
+  DynamicJsonDocument doc(2048);
+  deserializeJson(doc, data);
+  JsonObject JSONnamazVakti = doc.as<JsonObject>();
+  String vakitler[6] = {"Imsak","Gunes","Ogle","Ikindi","Aksam","Yatsi"};
+  for ( byte i = 0 ; i < 6 ; i ++ ) {
+    
+    String stringVakit = JSONnamazVakti[vakitler[i]].as<String>();
+    byte ayrac = stringVakit.indexOf(":");
+    namazVakti[i][0] = stringVakit.substring(0, ayrac).toInt();
+    namazVakti[i][1] = stringVakit.substring(ayrac + 1, stringVakit.length()).toInt();
 
-    if ( tirnakSayaci <= 2 )
-      continue;
-
-    if ( tirnakSayaci % 2 == 1 ) {
-
-      if ( !saatBirimi ) { // Saat
-        saat[ondalikBirimi] = payload[i];
-      }
-      else  // Dakika
-      {
-        dakika[ondalikBirimi] = payload[i];
-      }
-      ondalikBirimi = !ondalikBirimi;
-    }
-    else
-    {
-      saatBirimi = !saatBirimi;
-
-      namazVakti[vakitNo][0] = (saat[0] - '0') * 10;
-      namazVakti[vakitNo][0] += saat[1] - '0';
-
-      namazVakti[vakitNo][1] = (dakika[0] - '0') * 10;
-      namazVakti[vakitNo][1] += dakika[1] - '0';
-
-      vakitNo++;
-    }
   }
+}
+void ilkJsonTaniminiBul(String & data) {
+
+  int baslangic = data.indexOf("{");
+  int bitis = data.indexOf("},{");
+  if ( bitis == -1 )
+    bitis = data.indexOf("}");
+
+  bitis++;
+  data = data.substring(baslangic, bitis);
+}
+String koseliParantezKaldir(String data) {
+  int baslangic = data.indexOf("[");
+  int bitis = data.lastIndexOf("]");
+
+  if ( baslangic != -1 && bitis != -1 )
+    return data.substring(baslangic + 1, bitis);
+
+  return data;
 }
