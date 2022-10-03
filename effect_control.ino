@@ -2,14 +2,13 @@ bool firstTimeEffect[MAX_EFFECT_COUNTS];
 
 void effect_control_setup() {
 
-  CreateEffect(continuousUse, ReelEfect_setup, ReelEfect, V1, 19, 00, 21, 00); /// DemoReel
-  CreateEffect(singleUse, avizeKemeri_setup, avizeKemeri_loop, V2, namazVakti[IMSAK][SAAT], namazVakti[IMSAK][DAKIKA], namazVakti[GUNES][SAAT], namazVakti[GUNES][DAKIKA]); /// Circle night lamb
+  CreateEffect(singleUse, avizeKemeri_setup, avizeKemeri_loop, V2, namazVakti[IMSAK][SAAT], namazVakti[IMSAK][DAKIKA], namazVakti[GUNES][SAAT], namazVakti[GUNES][DAKIKA]-1); /// Circle night lamb
+  CreateEffect(continuousUse, wandering_spots_setup, wandering_spots_loop, V10, 16, 00, namazVakti[AKSAM][SAAT], namazVakti[AKSAM][DAKIKA]-1); /// Wandering Spots
+  CreateEffect(continuousUse, ReelEfect_setup, ReelEfect, V1, namazVakti[AKSAM][SAAT], namazVakti[AKSAM][DAKIKA], namazVakti[AKSAM][SAAT]+1, namazVakti[AKSAM][DAKIKA]); /// DemoReel
+  CreateEffect(continuousUse, partly_cloudy_setup, partly_cloudy_loop, V12, namazVakti[AKSAM][SAAT]+1, namazVakti[AKSAM][DAKIKA]-1 , 22,59); /// Partly Cloudy
   CreateEffect(continuousUse, flashingStars_setup, flashingStars_loop, V3, 23, 00, 00, 00); /// Flashing Stars
   CreateEffect(continuousUse, dynamic_circle_setup, dynamic_circle_loop, V8, 23, 00, 23, 30); /// Dynamic Circle
-  CreateEffect(continuousUse, wandering_spots_setup, wandering_spots_loop, V10, 16, 00, 19, 00); /// Wandering Spots
-  CreateEffect(continuousUse, partly_cloudy_setup, partly_cloudy_loop, V12, 21, 00, 23, 00); /// Partly Cloudy
-  //CreateEffect(continuousUse, random_moving_light_setup, random_moving_light_loop, V13, 23, 30, 23, 00); /// Random Moving Light
-
+  CreateEffect(continuousUse, rastgele_yol_setup, rastgele_yol_loop, V13, 00, 00, 00, 10); /// Random Moving Light
 }
 void effect_control_loop() {
 
