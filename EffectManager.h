@@ -74,7 +74,7 @@ void CreateEffect(byte useType, void (* setupFunction)(byte layer) , void (* loo
 
 }
 void changeEffectTimes(byte effectLayer , byte startHour = 0, byte startMinute = 0 , byte endHour = 0 , byte endMinute = 0 ) {
-  allEffects[effectLayer].build(allEffects[effectLayer].useType, allEffects[effectLayer].setupFunction , allEffects[effectLayer].loopFunction, allEffects[effectLayer].blynkVirtualPIN, allEffects[effectLayer].id, calculateTime(startHour, startMinute), calculateTime(endHour, endMinute));
+  allEffects[effectLayer].build(allEffects[effectLayer].useType, allEffects[effectLayer].setupFunction , allEffects[effectLayer].loopFunction, allEffects[effectLayer].blynkVirtualPIN, allEffects[effectLayer].id, calculateTime(startHour, startMinute), calculateTime(endHour, endMinute), allEffects[effectLayer].manualWork);
 }
 int findEffectIDLayerVirtualPin(int blynkVirtualPIN) {
   for ( byte i = 0 ; i < MAX_EFFECT_COUNTS ; i++ )
