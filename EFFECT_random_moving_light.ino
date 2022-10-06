@@ -1,14 +1,4 @@
-unsigned long rotaHesaplamaZamani = 0;
-unsigned long simdikiZaman = 0;
-#define YOL_ADETI 10
-#define ROTA_ADETI 8
-#define dalgasalHiz 8
-int sonKullanilanDonumNoktasi = -1;
-int led = 0;
-int yol = 0;
-bool yon = true;
-int rotalar[ROTA_ADETI][2];
-int yollar[YOL_ADETI][2]
+uint16_t yollar[][2] =
 {
   {0, 36},
   {36, 79},
@@ -22,7 +12,7 @@ int yollar[YOL_ADETI][2]
   {234, 289}
 };
 
-int kesisimNoktalari[][2] =
+uint16_t kesisimNoktalari[][2] =
 {
   {36, 116},
   {143, 160},
@@ -30,154 +20,39 @@ int kesisimNoktalari[][2] =
   {83, 218},
   {234, 289}
 };
-void random_moving_light_setup(byte effectID) {
-  Serial.println(effectID);
-}
-void random_moving_light_loop() {
 
-  rotaIslemleri();
-  ledYurut(yollar[yol][yon], yollar[yol][!yon]);
+uint16_t hareketliIsik[3];
+byte renk[3];
 
-  fadeToBlackBy( leds, NUM_LEDS, 1);
-  FastLED.show();
-}
+void rastgele_yol_setup(byte EffectID) {
 
-void ledYurut(int baslangic , int bitis ) {
-  bool _yon = baslangic < bitis;
-  /*Serial.print("LED : ");
-    Serial.print(led);
-    Serial.print(" || Baslangic : ");
-    Serial.print(_yon ? baslangic : bitis);
-    Serial.print(" || Bitis : ");
-    Serial.println(!_yon ? baslangic : bitis);*/
-  //led = beatsin16(dalgasalHiz, _yon ? baslangic : bitis, !_yon ? baslangic : bitis , _yon ? 0 : 60000 / dalgasalHiz , 0);
-  led += !_yon ? 1 : -1;
-  leds[led].setRGB(random(100), random(100), random(100));
-  Serial.println(led);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-bool donumNoktasiTekrarlaniyorMu() {
-
-  if ( sonKullanilanDonumNoktasi != led ) {
-    sonKullanilanDonumNoktasi = led;
-
-    for ( int i = 0 ; i < ARRAY_SIZE(kesisimNoktalari) ; i++ )
-      for ( int j = 0 ; j < ARRAY_SIZE(kesisimNoktalari[0]) ; j++ )
-        if ( sonKullanilanDonumNoktasi == kesisimNoktalari[i][j] )
-          return yolunSonuMu(kesisimNoktalari[i][!j]);
-
-
-
-  }
-
-  return false;
 
 }
 
+void rastgele_yol_loop() {
+  EVERY_N_MILLISECONDS(100) {
 
-void rotaIslemleri() {
+    if ( dugumNoktasiMi(yollar, ARRAY_SIZE(yollar), hareketliIsik[0] )) {
+      for ( byte i = 0 ; i < 3 ; i ++ )
+        renk[i] = random(255);
+      
+      uint16_t cikti[10][2];
+      rotalariHesapla(yollar, ARRAY_SIZE(yollar), kesisimNoktalari , ARRAY_SIZE(kesisimNoktalari) , hareketliIsik[0] , cikti , ARRAY_SIZE(cikti));
 
-  if ( !yolunSonuMu(led) )
-    return;
-
-  simdikiZaman = millis();
-  if ( simdikiZaman - rotaHesaplamaZamani < 2000 )
-    return;
-
-  rotaHesaplamaZamani = simdikiZaman;
-
-  /*if ( donumNoktasiTekrarlaniyorMu() ) {
-    return;
-    }*/
-
-  rotalariTemizle();
-  rotalariOlustur(led);
-  kesisimRotalariOlustur(led);
-  rastgeleRotaSec();
-}
-void rotalariTemizle() {
-  for ( int i = 0 ; i < ARRAY_SIZE(rotalar) ; i++ )
-    rotalar[i][0] = -1;
-}
-void rotalariOlustur(int ledNo) {
-  for ( int i = 0 ; i < ARRAY_SIZE(yollar) ; i++ ) {
-    for ( int j = 0 ; j < ARRAY_SIZE(yollar[0]) ; j++ ) {
-      if ( yollar[i][j] == ledNo ) {
-        rotaEkle(i, j);
+      for (byte i = 0 ; i < ARRAY_SIZE(cikti) ; i++) {
+        if ( cikti[i][0] == 0 && cikti[i][1] == 0 ) {
+          byte rastgeleSayi = random(i - 1);
+          hareketliIsik[1] = cikti[rastgeleSayi][0];
+          hareketliIsik[2] = cikti[rastgeleSayi][1];
+          break;
+        }
       }
     }
+
+    hareketliIsik[0] += hareketliIsik[1] < hareketliIsik[2] ? 1 : -1;
+    fadeToBlackBy( leds, NUM_LEDS, 10);
+    leds[hareketliIsik[0]].setRGB(renk[0],renk[1],renk[2]);
+
+
   }
-}
-void kesisimRotalariOlustur(int ledNo) {
-  for ( int i = 0 ; i < ARRAY_SIZE(kesisimNoktalari) ; i++ )
-    for ( int j = 0 ; j < ARRAY_SIZE(kesisimNoktalari[0]) ; j++ )
-      if ( ledNo == kesisimNoktalari[i][j] )
-        rotalariOlustur(kesisimNoktalari[i][!j]);
-
-}
-void rotaEkle(int yol , bool yon ) {
-  for ( int i = 0 ; i < ARRAY_SIZE(rotalar) ; i++ ) {
-    if ( rotalar[i][0] == -1 ) {
-      rotalar[i][0] = yol;
-      rotalar[i][1] = yon;
-      /*
-        Serial.print("yol : ");
-        Serial.print(yol);
-        Serial.print(" - ");
-        Serial.print(yon);
-        Serial.println(" : yon");
-      */
-      break;
-    }
-  }
-}
-void rastgeleRotaSec() {
-  byte rotaAdeti = 0;
-  for ( int i = 0 ; i < ARRAY_SIZE(rotalar) ; i++ ) {
-    if ( rotalar[i][0] == -1 )
-      break;
-
-    /*
-      Serial.print(i);
-      Serial.print(". rota - ");
-      Serial.print(rotalar[i][0]);
-      Serial.print(" : ");
-      Serial.println(rotalar[i][1]);
-    */
-
-    rotaAdeti++;
-  }
-
-  byte yeniRota = random(rotaAdeti);
-  yol = rotalar[yeniRota][0];
-  yon = rotalar[yeniRota][1];
-
-}
-
-bool yolunSonuMu(int pos) {
-
-  for ( int i = 0 ; i < ARRAY_SIZE(yollar) ; i++ ) {
-    for ( int j = 0 ; j < ARRAY_SIZE(yollar[0]) ; j++ ) {
-      if ( yollar[i][j] == pos ) {
-        return true;
-      }
-    }
-  }
-  return false;
 }
